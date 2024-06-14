@@ -103,7 +103,7 @@ func (r Running) Calories() float64 {
 	}
 	avgSpeed := r.meanSpeed()
 	k1 := (CaloriesMeanSpeedMultiplier*avgSpeed + CaloriesMeanSpeedShift) * r.Weight
-	return (k1 / MInKm * r.Duration.Minutes() * MinInHours)
+	return (k1 / MInKm * r.Duration.Hours() * MinInHours)
 }
 
 // TrainingInfo возвращает структуру InfoMessage с информацией о проведенной тренировке.
@@ -138,7 +138,7 @@ func (w Walking) Calories() float64 {
 	speed := w.meanSpeed() * kmhInMsec                                                     // СредняяСкоростьВМетрахВСекунду
 	speedPow := math.Pow(speed, 2)                                                         // (СредняяСкоростьВМетрахВСекунду**2)
 	Sum := metabolism + (speedPow/(w.Height/CmInM))*CaloriesSpeedHeightMultiplier*w.Weight // ((0.035 * ВесСпортсменаВКг + (СредняяСкоростьВМетрахВСекунду**2 / РостВМетрах) * 0.029 * ВесСпортсменаВКг)
-	caloriesBurned := Sum * w.Duration.Minutes() * MinInHours                              //* ВремяТренировкиВЧасах * minInH)
+	caloriesBurned := Sum * w.Duration.Hours() * MinInHours                              //* ВремяТренировкиВЧасах * minInH)
 	return caloriesBurned
 }
 
@@ -167,7 +167,7 @@ type Swimming struct {
 // длина_бассейна * количество_пересечений / м_в_км / продолжительность_тренировки
 // Это переопределенный метод Calories() из Training.
 func (s Swimming) meanSpeed() float64 {
-	return (float64(s.LengthPool) * float64(s.CountPool)) / MInKm / (s.Duration.Minutes() / MinInHours)
+	return (float64(s.LengthPool) * float64(s.CountPool)) / MInKm / (s.Duration.Hours())
 }
 
 // Calories возвращает количество калорий, потраченных при плавании.
@@ -176,7 +176,7 @@ func (s Swimming) meanSpeed() float64 {
 // Это переопределенный метод Calories() из Training.
 func (s Swimming) Calories() float64 {
 	avgSpeed := s.meanSpeed()
-	return (avgSpeed + SwimmingCaloriesMeanSpeedShift) * SwimmingCaloriesWeightMultiplier * s.Weight * s.Duration.Minutes()
+	return (avgSpeed + SwimmingCaloriesMeanSpeedShift) * SwimmingCaloriesWeightMultiplier * s.Weight * s.Duration.Hours()
 }
 
 func (s Swimming) TrainingInfo() InfoMessage {
